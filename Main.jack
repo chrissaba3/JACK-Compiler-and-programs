@@ -1,0 +1,11 @@
+
+
+class Main {
+    function void main() {
+        var DodgeSquareGame game;
+        let game = DodgeSquareGame.new();
+        do game.run();
+        do game.dispose();
+        return;
+    }
+}

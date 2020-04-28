@@ -1,0 +1,85 @@
+
+
+
+
+class DodgeSquareGame{
+		field DodgeSquare square;
+		field int direction;
+		field int circleDir;
+		field Circle circle;
+		field int score;
+
+		constructor DodgeSquareGame new() {
+      // Creates a 30 by 30 pixels square and positions it at the bottom right
+      // of the screen.
+      let square = DodgeSquare.new(480, 224, 30);
+      let direction = 3;  // initial state is left movement
+	  let circle = Circle.new(10, 204);
+	  let circleDir = 0;
+      return this;
+   }
+   //dispose of game
+   method void dispose() {
+      do square.dispose();
+	  do circle.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+   method void reinsert() {
+	do square.dispose();
+	let square = DodgeSquare.new(480, 224, 30);
+    let direction = 3;
+	return;
+   }
+   
+   method void moveCircle(){
+	if(circleDir = 1) { do circle.moveUp();}
+	if(circleDir = 2) { do circle.moveDown();}
+	do Sys.wait(5);
+	if(circle.getY() < 150){
+	let circleDir = 2;
+	}
+	return;
+   }
+   method void moveSquare() {
+
+      if (direction = 3) { do square.moveLeft(); }
+      do Sys.wait(5);  // delays the next movement
+	  if (square.getX() < 2){
+		do reinsert();
+		let score = score + 1;
+	  }
+      return;
+   }
+   method void run() {
+      var char key;  // the key currently pressed by the user
+      var boolean exit;
+      let exit = false;
+      
+      while (~exit) {
+         // waits for a key to be pressed
+         while (key = 0) {
+            let key = Keyboard.keyPressed();
+            do moveSquare();
+			do moveCircle();
+			if((square.getX() = circle.getX())&(square.getY() = circle.getY())){
+			do Output.printString("You Lose! Score = ");
+			do Output.printInt(score);
+			}
+         }
+         if (key = 81)  { let exit = true; }     // q key
+
+         if (key = 131) { let circleDir = 1; }   // up arrow
+
+
+         // waits for the key to be released
+         while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            do moveCircle();
+			do moveSquare();
+         }
+     } // while
+     return;
+   }
+}
+
